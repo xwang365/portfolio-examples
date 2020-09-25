@@ -1,0 +1,22 @@
+# train.flags: Flags for training.
+
+--flagfile=ml_perf/flags/9/architecture.flags
+
+--shuffle_buffer_size=10000
+# Filtering slows things down and can be equally obtained
+# taking half steps_to_train
+--filter_amount=1.0
+
+# Device specific hyperparameters re: batch size and LR schedules.
+--train_batch_size=32
+--lr_rates=0.16
+--lr_rates=0.016
+--lr_rates=0.0016
+--lr_boundaries=25000
+--lr_boundaries=37500
+--l2_strength=0.0001
+--steps_to_train=1500
+--num_ipu_cores=4
+# must be multiple of normalized_steps_to_train
+# normalized_steps_to_train=1000*4096/num_ipu_cores/train_batch_size
+--iterations_per_loop=2000

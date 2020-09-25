@@ -1,0 +1,26 @@
+# selfplay.flags: Flags for selfplay.
+
+# This flagfile also serves as the base for the boostrap & eval stages of
+# the RL loop.
+
+# original
+#--num_games=4096
+# 8 IPUS
+#--num_games=512
+# 10 IPUS
+#--num_games=410
+# 12 IPUS
+--num_games=342
+--num_readouts=240
+--value_init_penalty=0.2
+--holdout_pct=0.03
+--disable_resign_pct=0.1
+--resign_threshold=-0.99
+
+# Device-specific selfplay flags.
+
+# original best choice, CPU load wise
+#--parallel_games=1024
+# 12 IPUs, choice with numactl optimizations
+--parallel_games=342
+--virtual_losses=8
