@@ -23,7 +23,7 @@
 # Minigo 
 
 This README describes how to run the IPU version of the MiniGo training application.
-This has been developed using Poplar SDK 1.2.
+This has been developed using Poplar SDK 1.3.
 
 ## Overview
 
@@ -91,12 +91,11 @@ These changes are described in the `File Changes` section.
 
 ### 1) Download the Poplar SDK
 
-Install Poplar SDK 1.2 following the instructions in the 
+Install Poplar SDK 1.3 following the instructions in the 
 Getting Started guide for your IPU system. 
 The Getting Started guides can be found on the support portal here: 
 https://www.graphcore.ai/support.
-
-Make sure to source the `enable.sh` scripts for Poplar and gc_drivers (if running on hardware).
+Make sure to source the `enable.sh` script for Poplar.
 
 ### 2) Package installation
 

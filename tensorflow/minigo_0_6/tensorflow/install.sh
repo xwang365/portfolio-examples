@@ -48,12 +48,12 @@ chmod +x bazel-${BAZEL_VERSION}-installer-linux-x86_64.sh
 export TF_POPLAR_BASE=$POPLAR_SDK_ENABLED
 
 # Download and setup Graphcore TensorFlow
-# see also: https://github.com/graphcore/tensorflow/blob/r2.1/release-1.2/tensorflow/compiler/plugin/poplar/docs/build.rst
+# see also: https://github.com/graphcore/tensorflow/blob/r1.15/sdk-release-1.3/GRAPHCORE_BUILD.md
 # and https://www.tensorflow.org/install/source
 mkdir -p tf_build/install
 cd tf_build
 
-if cd tensorflow; then git pull; cd ..; else git clone -b r1.15/release-1.2 https://github.com/graphcore/tensorflow.git tensorflow; fi
+if cd tensorflow; then git pull; cd ..; else git clone -b r1.15/sdk-release-1.3 https://github.com/graphcore/tensorflow.git tensorflow; fi
 
 cd tensorflow
 export PYTHON_BIN_PATH=$(which python3)

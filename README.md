@@ -17,3 +17,4 @@ Unless otherwise specified by a LICENSE file in a subdirectory, the LICENSE refe
 ## Repository contents
 
 - `tensorflow/minigo_0_6`: IPU version of the MLPerf MiniGo training benchmark version 0.6.
+- `tensorflow2/ABC_COVID-19`: Approximate Bayesian Computation for COVID-19 modelling
