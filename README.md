@@ -1,4 +1,5 @@
-# Graphcore application demos and prototypes
+# Graphcore application demos and prototypes [STUB]
+
 
 This repository contains application demos and prototypes for use with
 Graphcore IPUs. Examples and applications presented here are experimental, and may only be tested/compatible with indicated SDK releases. 
@@ -18,3 +19,11 @@ Unless otherwise specified by a LICENSE file in a subdirectory, the LICENSE refe
 
 - `tensorflow/minigo_0_6`: IPU version of the MLPerf MiniGo training benchmark version 0.6.
 - `tensorflow2/ABC_COVID-19`: Approximate Bayesian Computation for COVID-19 modelling
+
+## Graphcore Portfolio Examples Stub
+
+See the README-stub.md and reuse for your application
+
+## New Applications
+
+Create your new applications in the folder <FRAMEWORK>/<app_name> (e.g. tensorflow2/model_XYZ)
