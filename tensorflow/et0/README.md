@@ -26,7 +26,8 @@ source venv/bin/activate
 pip install <path to the tensorflow-1 wheel file from the Poplar SDK>
 pip install -r requirements.txt
 ```
-# Run script
+# Compile and run script
+The compile command has been included in run.sh, no additional compile is required.  
 Start the program by running `bash run.sh`, we use 1 day’s data to repeat 14 times to simulate 14 days of ET0 calculation process with 4 IPU, this will take 10 minutes.  
 # License
 The code presented here is licensed under the MIT License.  
