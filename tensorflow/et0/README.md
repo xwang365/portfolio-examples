@@ -10,6 +10,18 @@
 This has been tested with the following dependencies:
 - Poplar SDK version 2.2
 - Ubuntu 18.04
+
+## Data
+
+This example does not contain sample data due to its proprietary nature, but it can be reproduced using conventional Geospatial data. In order to run the example in this code, you would need the data described below. 
+
+
+file_dem : Digital Elevation Model (DEM) Data
+file_latit : Latitude and Longitude boundary information 
+prs_file : Air pressure 
+rhu_file : Humidity
+tem_file : Temperature
+win_file : Wind Speed
 ## Quick start guide
 Prepare the environment  
 **1) Download the Poplar SDK**  

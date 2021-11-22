@@ -15,12 +15,20 @@ fi
 
 START_TIME=`date +%s`
 file_root="test_chinese_map/"
+# Air pressure
 prs_file="raw_data/SURF_CLI_CHN_MUL_DAY-PRS-10004-20210403.TXT"
+# Humidity
 rhu_file="raw_data/SURF_CLI_CHN_MUL_DAY-RHU-13003-20210403.TXT"
+# Temperature 
 tem_file="raw_data/SURF_CLI_CHN_MUL_DAY-TEM-12001-20210403.TXT"
+# Wind Speed
 win_file="raw_data/SURF_CLI_CHN_MUL_DAY-WIN-11002-20210403.TXT"
+# Digital Elevation Model (DEM) Data
 file_dem="resource/DEM_china_1km.tif"
+# Latitude and Longitude boundary information
 file_latit="latitude/china_latitude.tif"
+
+# These are the path where daily calculation results are stored
 tif_save_1=$save_folder"/ET0_generate_0103_cvt_total_1.tif"
 tif_save_2=$save_folder"/ET0_generate_0103_cvt_total_2.tif"
 tif_save_3=$save_folder"/ET0_generate_0103_cvt_total_3.tif"
