@@ -29,6 +29,6 @@ pip install -r requirements.txt
 # Run script
 Start the program by running `bash run.sh`, we use 1 day’s data to repeat 14 times to simulate 14 days of ET0 calculation process with 4 IPU, this will take 10 minutes.  
 # License
-The code presented here is licensed under the MIT License.
+The code presented here is licensed under the MIT License.  
 `kriging_test.py` refers to `Pykrige`  
 `kriging_test.py` is licensed under BSD 3-Clause: https://github.com/GeoStat-Framework/PyKrige/blob/main/LICENSE  
