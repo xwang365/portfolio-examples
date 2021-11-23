@@ -10,6 +10,9 @@
 This has been tested with the following dependencies:
 - Poplar SDK version 2.2
 - Ubuntu 18.04
+## Data
+This example does not contain sample data due to its proprietary nature, but it can be reproduced using conventional Geospatial data. In order to run the example in this code, please download our dummy data [here](https://1drv.ms/u/s!Apa1VesWk84UgUszNcXuYRbphV4a?e=3QFTQB) and place it in the `dummy_data` folder.  
+The `dummy_data` folder will contains three subfolders named `dummy_raw_data`, `dummy_recource`, and `dummy_latitude` if unzipped. The 4 txt files in `dummy_raw_data` contain the latitude,longitude and weather elements (pressure, wind speed, humidity, temperature) information of each point. The tif file in `dummy_recource` contain the elevation information of a certain area. The tif file in `dummy_latitude` contain the latitude information of a certain area.
 ## Quick start guide
 Prepare the environment  
 **1) Download the Poplar SDK**  
@@ -26,9 +29,8 @@ source venv/bin/activate
 pip install <path to the tensorflow-1 wheel file from the Poplar SDK>
 pip install -r requirements.txt
 ```
-# Compile and run script
-The compile command has been included in run.sh, no additional compile is required.  
-Start the program by running `bash run.sh`, we use 1 day’s data to repeat 14 times to simulate 14 days of ET0 calculation process with 4 IPU, this will take 10 minutes.  
+# Data decompression, compile and run example script
+The program run.sh contains the steps to compile the matrix solver library and run the IPU implementation of the kriging algorithm, data decompression is also included. This example uses 1 day’s dummy data and repeated 14 times to simulate 14 days of ET0 calculations. This will run the process with 4 IPU, which will take 10 minutes to complete. 
 # License
 The code presented here is licensed under the MIT License.  
 `kriging_test.py` refers to `Pykrige`  
