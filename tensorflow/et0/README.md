@@ -6,7 +6,7 @@
 4.The input form of ET0 is discrete points, the form of each point is [longitude, latitude, pressure/wind speed/temperature], and there are more than 2000 such points involved in the calculation every day.  
 5.There are many models involved in kriging algorithm, we use linear semivariogram function.  
 5.Our project is based on the open source kriging algorithm in `1` and the code provided by Agilor.  
-# Environment
+## Environment
 This has been tested with the following dependencies:
 - Poplar SDK version 2.2
 - Ubuntu 18.04
@@ -29,9 +29,11 @@ source venv/bin/activate
 pip install <path to the tensorflow-1 wheel file from the Poplar SDK>
 pip install -r requirements.txt
 ```
-# Data decompression, compile and run example script
-The program run.sh contains the steps to compile the matrix solver library and run the IPU implementation of the kriging algorithm, data decompression is also included. This example uses 1 day’s dummy data and repeated 14 times to simulate 14 days of ET0 calculations. This will run the process with 4 IPU, which will take 10 minutes to complete. 
-# License
+**3) Data decompression, compile and run example script**
+
+The program run.sh contains the steps to compile the matrix solver library and run the IPU implementation of the kriging algorithm, data decompression is also included. This example uses 1 day’s dummy data and repeated 14 times to simulate 14 days of ET0 calculations. This will run the process with 4 IPU, which will take 10 minutes to complete.   
+
+## License
 The code presented here is licensed under the MIT License.  
 `kriging_test.py` refers to `Pykrige`  
 `kriging_test.py` is licensed under BSD 3-Clause: https://github.com/GeoStat-Framework/PyKrige/blob/main/LICENSE  
