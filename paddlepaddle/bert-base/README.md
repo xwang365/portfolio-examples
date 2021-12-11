@@ -85,15 +85,17 @@ This project aims to build BERT-Base pre-training and SQuAD fine-tuning task usi
 
 ## Quick Start Guide
 
+**The Paddle-Bert project depends on Poplar SDK, Docker, Paddlepaddle and PaddleNLP. Please follow the instructions below to prepare the environment and run the model.**
+
 ### 1）Prepare Project Environment
 
 #### Poplar SDK
 
-`poplar_sdk-ubuntu_18_04-2.3.0+774-b47c577c2a`
+Install the Poplar SDK following the instructions in the Getting Started guide for your IPU system. Make sure to source the enable.sh scripts for Poplar and PopART.
 
-#### PaddlePaddle
+SDK version: `poplar_sdk-ubuntu_18_04-2.3.0+774-b47c577c2a`
 
-- Create Docker container
+#### Docker
 
 ```
 git clone -b paddle_bert_release https://github.com/graphcore/Paddle.git
@@ -122,38 +124,46 @@ docker run --ulimit memlock=-1:-1 --net=host --cap-add=IPC_LOCK \
 -it paddlepaddle/paddle:dev-ipu-2.3.0 bash
 ```
 
-All of later processes are required to be executed in the container.
+**All of later processes are required to be executed in the container.**
 
-- Compile and installation
+#### Requirements
+
+The following requirements are required by Paddlepaddle and PaddleNLP. 
+```
+pip3.7 install jieba h5py colorlog colorama seqeval multiprocess numpy==1.19.2 paddlefsl==1.0.0 six==1.13.0
+```
+
+The following requirements are required by the Paddle-Bert.
+```
+pip3.7 install wandb
+
+pip3.7 install torch==1.7.0+cpu -f https://download.pytorch.org/whl/cpu/torch_stable.html
+
+pip3.7 install torch-xla@https://storage.googleapis.com/tpu-pytorch/wheels/torch_xla-1.7-cp37-cp37m-linux_x86_64.whl
+```
+
+#### The Compile and installation of Paddlepaddle
 
 ```
 git clone -b paddle_bert_release https://github.com/graphcore/Paddle.git
 
 cd Paddle
 
+# `${POPLAR_DIR}` and `${POPART_DIR} are the directories of the Poplar SDK and the PopART SDK respectively.
+
 cmake -DPYTHON_EXECUTABLE=/usr/bin/python \
--DWITH_PYTHON=ON -DWITH_IPU=ON -DPOPLAR_DIR=/opt/poplar \
--DPOPART_DIR=/opt/popart -G "Unix Makefiles" -H`pwd` -B`pwd`/build
+-DWITH_PYTHON=ON -DWITH_IPU=ON -DPOPLAR_DIR=`${POPLAR_DIR}` \
+-DPOPART_DIR=`${POPART_DIR}` -G "Unix Makefiles" -H`pwd` -B`pwd`/build
 
 cmake --build `pwd`/build --config Release --target paddle_python -j$(nproc)
 
 pip3.7 install -U build/python/dist/paddlepaddle-0.0.0-cp37-cp37m-linux_x86_64.whl
 ```
 
-#### PaddleNLP
+#### The installation of PaddleNLP
 
 ```
-pip3.7 install jieba h5py colorlog colorama seqeval multiprocess numpy==1.19.2 paddlefsl==1.0.0 six==1.13.0 wandb
-
 pip3.7 install git+https://github.com/graphcore/PaddleNLP.git@paddle_bert_release
-```
-
-#### Others
-
-```
-pip3.7 install torch==1.7.0+cpu -f https://download.pytorch.org/whl/cpu/torch_stable.html
-
-pip3.7 install torch-xla@https://storage.googleapis.com/tpu-pytorch/wheels/torch_xla-1.7-cp37-cp37m-linux_x86_64.whl
 ```
 
 ### 2) Execution
