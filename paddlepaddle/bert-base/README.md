@@ -22,22 +22,22 @@ This project aims to build BERT-Base pre-training and SQuAD fine-tuning task usi
 | File                         | Description                                                             |
 | ---------------------------- | ----------------------------------------------------------------------- |
 | `README.md`                  | How to run the model.                                                   |
-| `run_pretrain.py`            | The algorithm script to run pretraining tasks (phase1 and phase2).      |
-| `run_squad.py`               | The algorithm script to run SQuAD finetune task.                        |
+| `run_pretrain.py`            | The algorithm script to run pre-training tasks (phase1 and phase2).     |
+| `run_squad.py`               | The algorithm script to run SQuAD fine-tuning task.                     |
 | `run_squad_infer.py`         | The algorithm script to run SQuAD validation task.                      |
 | `modeling.py`                | The algorithm script to build the Bert-Base model.                      |
-| `dataset_ipu.py`             | The algorithm script to load input data in pretraining.                 |
+| `dataset_ipu.py`             | The algorithm script to load input data in pre-training.                |
 | `run_stage.sh`               | Test script to run single stage (phase1, phase2, SQuAD and validation). |
 | `run_all.sh`                 | Test script to run all of stages.                                       |
 | `LICENSE`                    | The license of Apache.                                                  |
 
 ## Dataset
 
-1. Pretraining dataset
+1. Pre-training dataset
 
    Refer to the Wikipedia dataset generator provided by Nvidia (https://github.com/NVIDIA/DeepLearningExamples.git).
 
-   Generate sequence_length=128 and 384 datasets for pretraining phase1 and phase2 respectively.
+   Generate sequence_length=128 and 384 datasets for pre-training phase1 and phase2 respectively.
 
    ```
    Code base：https://github.com/NVIDIA/DeepLearningExamples/tree/88eb3cff2f03dad85035621d041e23a14345999e/TensorFlow/LanguageModeling/BERT
@@ -77,23 +77,25 @@ This project aims to build BERT-Base pre-training and SQuAD fine-tuning task usi
 ### Added
 
 - Added `README.md` to introduce how to run the Bert-Base model.
-- Added `run_squad.py` to run the SQuAD finetune task.
+- Added `run_squad.py` to run the SQuAD fine-tuning task.
 - Added `run_squad_infer.py` to run the SQuAD validation.
-- Added `dataset_ipu.py` to load input data in pretraining.
+- Added `dataset_ipu.py` to load input data in pre-training.
 - Added `run_stage.sh` to run the single task (phase1, phase2, SQuAD and validation).
 - Added `run_all.sh` to run the complete process.
 
 ## Quick Start Guide
 
+**The Paddle-Bert project depends on Poplar SDK, Docker, Paddlepaddle and PaddleNLP. Please follow the instructions below to prepare the environment and run the model.**
+
 ### 1）Prepare Project Environment
 
 #### Poplar SDK
 
-`poplar_sdk-ubuntu_18_04-2.3.0+774-b47c577c2a`
+Install the Poplar SDK following the instructions in the Getting Started guide for your IPU system. Make sure to source the enable.sh scripts for Poplar and PopART.
 
-#### PaddlePaddle
+SDK version: `poplar_sdk-ubuntu_18_04-2.3.0+774-b47c577c2a`
 
-- Create Docker container
+#### Docker
 
 ```
 git clone -b paddle_bert_release https://github.com/graphcore/Paddle.git
@@ -101,10 +103,20 @@ git clone -b paddle_bert_release https://github.com/graphcore/Paddle.git
 cd Paddle
 
 # build docker image
+
 docker build -t paddlepaddle/paddle:dev-ipu-2.3.0 -f tools/dockerfile/Dockerfile.ipu .
 
+# The ipu.conf is required here. if the ipu.conf is available, please make sure `${HOST_IPUOF_PATH}` is the right dir of the ipu.conf. 
+# If the ipu.conf is not available, please follow the instruction below to generate a ipu.conf.
+
+vipu create partition ipu --size 16
+
+# Then the ipu.conf is able to be found in the dir below.
+
+ls ~/.ipuof.conf.d/
+
 # create container
-# The ipuof.conf is required here.
+
 docker run --ulimit memlock=-1:-1 --net=host --cap-add=IPC_LOCK \
 --device=/dev/infiniband/ --ipc=host --name paddle-ipu-dev \
 -v ${HOST_IPUOF_PATH}:/ipuof \
@@ -112,38 +124,46 @@ docker run --ulimit memlock=-1:-1 --net=host --cap-add=IPC_LOCK \
 -it paddlepaddle/paddle:dev-ipu-2.3.0 bash
 ```
 
-All of later processes are required to be executed in the container.
+**All of later processes are required to be executed in the container.**
 
-- Compile and installation
+#### Requirements
+
+The following requirements are required by Paddlepaddle and PaddleNLP. 
+```
+pip3.7 install jieba h5py colorlog colorama seqeval multiprocess numpy==1.19.2 paddlefsl==1.0.0 six==1.13.0
+```
+
+The following requirements are required by the Paddle-Bert.
+```
+pip3.7 install wandb
+
+pip3.7 install torch==1.7.0+cpu -f https://download.pytorch.org/whl/cpu/torch_stable.html
+
+pip3.7 install torch-xla@https://storage.googleapis.com/tpu-pytorch/wheels/torch_xla-1.7-cp37-cp37m-linux_x86_64.whl
+```
+
+#### The Compile and installation of Paddlepaddle
 
 ```
 git clone -b paddle_bert_release https://github.com/graphcore/Paddle.git
 
 cd Paddle
 
+# `${POPLAR_DIR}` and `${POPART_DIR} are the directories of the Poplar SDK and the PopART SDK respectively.
+
 cmake -DPYTHON_EXECUTABLE=/usr/bin/python \
--DWITH_PYTHON=ON -DWITH_IPU=ON -DPOPLAR_DIR=/opt/poplar \
--DPOPART_DIR=/opt/popart -G "Unix Makefiles" -H`pwd` -B`pwd`/build
+-DWITH_PYTHON=ON -DWITH_IPU=ON -DPOPLAR_DIR=`${POPLAR_DIR}` \
+-DPOPART_DIR=`${POPART_DIR}` -G "Unix Makefiles" -H`pwd` -B`pwd`/build
 
 cmake --build `pwd`/build --config Release --target paddle_python -j$(nproc)
 
 pip3.7 install -U build/python/dist/paddlepaddle-0.0.0-cp37-cp37m-linux_x86_64.whl
 ```
 
-#### PaddleNLP
+#### The installation of PaddleNLP
 
 ```
-pip3.7 install jieba h5py colorlog colorama seqeval multiprocess numpy==1.19.2 paddlefsl==1.0.0 six==1.13.0 wandb
-
 pip3.7 install git+https://github.com/graphcore/PaddleNLP.git@paddle_bert_release
-```
-
-#### Others
-
-```
-pip3.7 install torch==1.7.0+cpu -f https://download.pytorch.org/whl/cpu/torch_stable.html
-
-pip3.7 install torch-xla@https://storage.googleapis.com/tpu-pytorch/wheels/torch_xla-1.7-cp37-cp37m-linux_x86_64.whl
 ```
 
 ### 2) Execution
@@ -152,27 +172,27 @@ pip3.7 install torch-xla@https://storage.googleapis.com/tpu-pytorch/wheels/torch
 
 Please check the `--input_dir` in `run_stage.sh` and make sure the dir of input data is right.
 
-The type of the input data in `Phase1(Pretraining)` is the `tfrecord` (sequence_length = 128).
+The type of the input data in `Phase1(Pre-training)` is the `tfrecord` (sequence_length = 128).
 
-The type of the input data in `Phase2(Pretraining)` is the `tfrecord` (sequence_length = 384).
+The type of the input data in `Phase2(Pre-training)` is the `tfrecord` (sequence_length = 384).
 
-The name of the input data in `finetune` is the `train-v1.1.json`.
+The name of the input data in `Fine-tuning` is the `train-v1.1.json`.
 
-The name of the input data in `validation` is the `dev-v1.1.json`.
+The name of the input data in `Validation` is the `dev-v1.1.json`.
 
-- Run pretraining phase1 (sequence_length = 128)
+- Run pre-training phase1 (sequence_length = 128)
 
 ```
 ./run_stage.sh ipu phase1 _ pretrained_128_model
 ```
 
-- Run pretraining phase2 (sequence_length = 384)
+- Run pre-training phase2 (sequence_length = 384)
 
 ```
 ./run_stage.sh ipu phase2 pretrained_128_model pretrained_384_model
 ```
 
-- Run SQuAD finetune task
+- Run SQuAD fine-tuning task
 
 ```
 ./run_stage.sh ipu SQuAD pretrained_384_model finetune_model
