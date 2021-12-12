@@ -19,9 +19,11 @@ Unless otherwise specified by a LICENSE file in a subdirectory, the LICENSE refe
 
 | Example | Framework | Link |
 | ------- | ---- | ---- |
-| Minigo | Tensorflow1 | [code](tensorflow/minigo_0_6/) |
+| Minigo | Tensorflow | [code](tensorflow/minigo_0_6/) |
 | Reference Evapotranspiration(ET0)  |Tensorflow | [code](portfolio-examples/tensorflow/et0/) |
+| Deep Molecular Dynamics (DeepMD) | Tensorflow | [code](https://github.com/graphcore/portfolio-examples/tree/wx/deepmd/tensorflow/deepmd) |
 | Probabilistic COVID-19 modelling with Approximate Bayesian Computation (ABC) | TensorFlow | [code](tensorflow2/ABC_COVID-19/) |
 | BERT Base | PaddlePaddle | [code](paddlepaddle/bert-base/) |
+| GPT2 | Pytorch | [code](https://github.com/graphcore/portfolio-examples/tree/develop/gpt2/pytorch/gpt2) |
 
 
