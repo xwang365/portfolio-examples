@@ -1,0 +1,7 @@
+transformers>=4.12.5
+datasets>=1.7.0
+tokenizers>=0.10.3
+scipy>=1.5.4
+wandb==0.12.1
+horovod>=0.22.0 --no-binary=horovod
+tfrecord>=1.13
