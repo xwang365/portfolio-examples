@@ -9,7 +9,7 @@ then
         --pretrained-checkpoint $CHECKPOINT_PATH \
         --fp16 \
         --seq-length 1024 \
-        --tokenizer-type 1 \
+        --tokenizer-type 0 \
         --batches-per-step 1 \
         --layers-per-ipu 7 8 8 1 \
         --matmul-proportion 0.4 0.4 0.4 0.2
@@ -20,7 +20,7 @@ then
         --pretrained-checkpoint $CHECKPOINT_PATH \
         --fp16 \
         --seq-length 1024 \
-        --tokenizer-type 1 \
+        --tokenizer-type 0 \
         --batches-per-step 1 \
         --layers-per-ipu 7 8 8 1 \
         --matmul-proportion 0.4 0.4 0.4 0.2 \

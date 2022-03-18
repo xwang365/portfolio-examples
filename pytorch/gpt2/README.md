@@ -39,7 +39,7 @@ python train_gpt2.py \
     --train-path generated
 ```
 
-## Generate pretraining dataset (optional)
+## Generate pretraining dataset
 
 The dataset used for pretraining is WIKI-103. It can be generated from a RAW dump of Wikipedia following a five step process.
 
@@ -102,25 +102,29 @@ python3 ./data/wikipedia_preprocess.py --input-file-path <chosen-folder-for-extr
 ```
 
 ## Run the pre-training application of GPT2-small
+**Notice**: The default scripts are used to get benchmarks for throughput only. You must passing path to processed data files to `--train-path` to start the actual pre-training, you may also need to specify the `--save-model-path` to save checkpoints. Further arguments are described in the source file `train_gpt2.py` and hyperparameters for model are listed in json files in `config/`.
 
+This script runs the 117M parameter GPT2 pre-training.
 ```
 bash run/pretraining_small.sh
 ```
 
-## Run the pre-training application of GPT2-medium on POD16
-
+## Run the pre-training application of GPT2-medium
+This script runs the 345M parameter GPT2 pre-training.
 ```
 bash run/pretraining_medium.sh
 ```
 
-## Run the pre-training application of GPT2-large(SL=512) on POD16
-
+## Run the pre-training application of GPT2-large(SL=512)
+This script runs the 762M parameter GPT2 pre-training, with sequence length=512.
 ```
 bash run/pretraining_large.sh
 ```
 
 ## Run the pre-training application of GPT2-large by poprun
+This script runs the 762M parameter GPT2 distributed pre-training using PopRun, which can scale the application from POD16 to POD256 and further.
 
+We advise you to first read through the [User Guide](https://docs.graphcore.ai/projects/poprun-user-guide/en/latest/index.html) for PopRun before running this script.
 ```
 bash run/pretraining_large_poprun.sh
 ```
@@ -129,7 +133,7 @@ bash run/pretraining_large_poprun.sh
 
 Setup your environment and generate the sample dataset as explained above and run `python3 -m pytest` from the root folder.
 
-## tfrecord data (faster)
+## TFRecord dataset (optional)
 In order to use the multi-threaded `dataloader`, `tfrecord` files need to be generated.
 ```
 cd <chosen-folder-for-preprocessed-files>
@@ -160,8 +164,14 @@ python train_gpt2.py \
     --tfrecord-path ./data/tfrecords/*.tfrecord \
     --epochs 3
 ```
-## Evaluation
 
+## Megatron dataset (optional)
+We also support mmap dataset which is used by NVIDIA's Megatron, you should first follow the [instruction](https://github.com/ningchaoar/Megatron-LM#data-preprocessing) to get `my-gpt2_text_document.bin` and `my-gpt2_text_document.idx`.
+Then you need to set `--train-path dynamic` and `--data-prefix <path>/my-gpt2_text_document` in the training scripts.
+
+If you have trained model using Megatron's dataset, you will need to set `--tokenizer-type 1` in `tasks/run_evaluate.sh` for evalutaion.
+
+## Evaluation
 ### WikiText Perplexity Evaluation
 we evaluate perplexity on the word-level [WikiText-103 test dataset](https://s3.amazonaws.com/research.metamind.io/wikitext/wikitext-103-v1.zip), 
 and appropriately compute perplexity given the change in tokens 
@@ -188,6 +198,17 @@ bash tasks/run_text_generator.sh
 We generate text samples using the pretrained GPT2 model. 
 Few changes need to make, such as we need to provide the path to the pretrained checkpoint, 
 the length of the output samples.
+
+## Benchmark
+We have pretrained GPT2-Medium on both GPU and IPU using the Wikipedia dataset.
+
+|model| device | vocab size | sequence length | optimizer | global batch size | pretraining steps | LM loss | throughput (samples/s) | lambada acc (strict) | lambada acc (non-strict) | wiki (ppl) | wiki (adjusted ppl) |
+| ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
+| GPT2-Medium | 8*V100 | 50256 | 1024 | Adam | 1024 | 34k | 3.07 | 112 | 19.35% | 36.04% | 29.16 | 40.97 |
+| GPT2-Medium | 8*V100 | 50256 | 1024 | Adam | 1024 | 55k | 2.94 | 112 | 21.21% | 37.55% | 26.03 | 36.16 |
+| GPT2-Medium | POD16 | 50272 | 1024 | AdamW | 1024 | 22k | 3.04 | 232 | 19.56% | 36.10% | 28.42 | 39.83 |
+| GPT2-Medium | POD16 | 50272 | 1024 | AdamW | 1024 | 36k | 2.89 | 232 | 22.16% | 38.29% | 25.14 | 34.80 |
+
 
 ## Licensing
 
