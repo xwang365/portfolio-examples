@@ -2,7 +2,7 @@
 
 This directory contains an implementation of GPT2 models in PyTorch for the IPU, leveraging the HuggingFace Transformers library. 
 
-There is one example for GPT2 pre-training: `train_gpt2.py`
+There are two examples for GPT2, the one is for pre-training: `train_gpt2.py` and the second one is text generation `text_generator_fast_one_token.py`
 
 ## Environment setup
 
@@ -191,14 +191,33 @@ We use the following command to run LAMBADA evaluation on a pretrained model.
 bash tasks/run_evaluate.sh lmbd
 ```
 
-##  Text Generation
+##  Text Generation (Chinese Poem)
 ```
 bash tasks/run_text_generator.sh
 ```
-We generate text samples using the pretrained GPT2 model. 
-Few changes need to make, such as we need to provide the path to the pretrained checkpoint, 
-the length of the output samples.
+or
+```
+python tasks/text_generator_fast_one_token.py \
+      --model-path uer/gpt2-chinese-poem \
+      --fp16 true \
+      --single-ipu true \
+      --poptorch_loop true \
+      --batch-size 1 \
+      --input-len  100 \
+      --output-len 924 \
+```
+We generate Chinese ancient poems using the pretrained GPT2-small model. 
+This task is interactive. You can enter one sentence such as "[CLS]梅 山 如 积 翠 ，" and it will generate the rest ancient poems.  
 
+| Arguments | Meaning |
+| ---- | ---- | 
+| --model-path | Loading pretrained GPT2-small checkpoint from huggingface.co. The default is uer/gpt2-chinese-poem |
+| --fp16 | Whether to use fp16 model for this task|
+| --single-ipu |Whether to use single IPU for this task |
+| --poptorch_loop| Whether to use poptorch_loop to optimize the latency|
+| --batch-size| batch size for inference. The defult is 1|
+| --input-len| The maximum input length you want to set for this task|
+| --output-len| The maximum output length you want to set for this task|
 ## Benchmark
 We have pretrained GPT2-Medium on both GPU and IPU using the Wikipedia dataset.
 
